@@ -23,5 +23,5 @@ const skipAd = () => {
         .forEach((startPageTopAd) => startPageTopAd.remove());
 };
 if (!window.skipAdIntervalID) {
-    window.skipAdIntervalID = setInterval(skipAd, 50);
+    window.skipAdIntervalID = setInterval(skipAd, 200);
 }

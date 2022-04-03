@@ -16,7 +16,7 @@ const tryFetchSkipSegments = async (videoID) => {
             .map((a) => a.segment);
     } catch (e) {
         console.log(
-            `Sponsorblock: error fetching skipSegments for ${videoID}, ${e}`
+            `Sponsorblock: failed fetching skipSegments for ${videoID}, reason: ${e}`
         );
         return [];
     }
@@ -28,16 +28,14 @@ const skipSegments = async () => {
     }
     const v = document.querySelector('video');
     if (!v) {
-        console.log("Sponsorblock: couldn't find video element");
-        return;
+        return console.log("Sponsorblock: couldn't find video element");
     }
     const key = `segmentsToSkip-${videoID}`;
     window[key] = window[key] || (await tryFetchSkipSegments(videoID));
     for (const [start, end] of window[key]) {
         if (v.currentTime < end && v.currentTime > start) {
             v.currentTime = end;
-            console.log(`Sponsorblock: skipped video to ${end}`);
-            return;
+            return console.log(`Sponsorblock: skipped video to ${end}`);
         }
     }
 };

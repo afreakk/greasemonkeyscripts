@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Skip youtube ads
 // @version      1.0.0
-// @description  Speed up and skip YouTube ads automatically
+// @description  Skips YouTube ads automatically
 // @author       afreakk
 // @match        *://*.youtube.com/*
 // @exclude      *://*.youtube.com/subscribe_embed?*

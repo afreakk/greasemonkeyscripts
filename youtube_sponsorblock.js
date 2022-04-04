@@ -26,16 +26,15 @@ const skipSegments = async () => {
     if (!videoID) {
         return;
     }
-    const v = document.querySelector('video');
-    if (!v) {
-        return console.log("Sponsorblock: couldn't find video element");
-    }
     const key = `segmentsToSkip-${videoID}`;
     window[key] = window[key] || (await tryFetchSkipSegments(videoID));
-    for (const [start, end] of window[key]) {
-        if (v.currentTime < end && v.currentTime > start) {
-            v.currentTime = end;
-            return console.log(`Sponsorblock: skipped video to ${end}`);
+    for (const v of document.querySelectorAll('video')) {
+        if (Number.isNaN(v.duration)) continue;
+        for (const [start, end] of window[key]) {
+            if (v.currentTime < end && v.currentTime > start) {
+                v.currentTime = end;
+                return console.log(`Sponsorblock: skipped video to ${end}`);
+            }
         }
     }
 };

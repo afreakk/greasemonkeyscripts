@@ -11,9 +11,13 @@ const skipAd = () => {
         .querySelectorAll('.videoAdUiSkipButton,.ytp-ad-skip-button')
         .forEach((b) => b.click());
     if (document.querySelector('.ad-showing')) {
-        document
-            .querySelectorAll('video')
-            .forEach((v) => (v.currentTime = v.duration));
+        document.querySelectorAll('video').forEach((v) => {
+            try {
+                v.currentTime = v.duration;
+            } catch (e) {
+                console.log('skipAd:', e);
+            }
+        });
     }
     document
         .querySelectorAll('#player-ads')

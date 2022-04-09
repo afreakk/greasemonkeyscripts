@@ -12,20 +12,19 @@ const skipAd = () => {
         .forEach((b) => b.click());
     if (document.querySelector('.ad-showing')) {
         document.querySelectorAll('video').forEach((v) => {
-            try {
-                v.currentTime = v.duration;
-            } catch (e) {
-                console.log('skipAd:', e);
-            }
+            Number.isNaN(v.duration) || (v.currentTime = v.duration);
         });
     }
     document
-        .querySelectorAll('#player-ads')
-        .forEach((sidebarAd) => sidebarAd.remove());
+        .querySelectorAll('.ytd-display-ad-renderer#dismissible')
+        .forEach((el) =>
+            // experimental, hopefully it doesn't remove unintended stuff. supposed to remove the ad video in top left of recommended
+            el?.parentElement?.parentElement?.parentElement?.remove?.()
+        );
     document
-        .querySelectorAll('#masthead-ad')
-        .forEach((startPageTopAd) => startPageTopAd.remove());
+        .querySelectorAll('#player-ads, #masthead-ad')
+        .forEach((ad) => ad.remove());
 };
 if (!window.skipAdIntervalID) {
-    window.skipAdIntervalID = setInterval(skipAd, 200);
+    window.skipAdIntervalID = setInterval(skipAd, 333);
 }

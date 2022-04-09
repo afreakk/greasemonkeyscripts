@@ -6,21 +6,19 @@
 // @match        *://*.youtube.com/*
 // @exclude      *://*.youtube.com/subscribe_embed?*
 // ==/UserScript==
-const tryFetchSkipSegments = async (videoID) => {
-    try {
-        const responseJson = await fetch(
-            `https://sponsor.ajay.app/api/skipSegments?videoID=${videoID}`
-        ).then((r) => r.json());
-        return responseJson
-            .filter((a) => a.actionType === 'skip')
-            .map((a) => a.segment);
-    } catch (e) {
-        console.log(
-            `Sponsorblock: failed fetching skipSegments for ${videoID}, reason: ${e}`
+const tryFetchSkipSegments = (videoID) =>
+    fetch(`https://sponsor.ajay.app/api/skipSegments?videoID=${videoID}`)
+        .then((r) => r.json())
+        .then((rJson) =>
+            rJson.filter((a) => a.actionType === 'skip').map((a) => a.segment)
+        )
+        .catch(
+            (e) =>
+                console.log(
+                    `Sponsorblock: failed fetching skipSegments for ${videoID}, reason: ${e}`
+                ) || []
         );
-        return [];
-    }
-};
+
 const skipSegments = async () => {
     const videoID = new URL(document.location).searchParams.get('v');
     if (!videoID) {

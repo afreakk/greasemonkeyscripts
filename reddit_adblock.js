@@ -5,11 +5,14 @@
 // @match        *://*.reddit.com/*
 // ==/UserScript==
 
-setInterval(() => {
+const removeShit = () => {
     // promoted posts has this class
     document.querySelectorAll('.promotedlink').forEach((e) => e.remove());
     // nagging about confirming email has this class
     document
         .querySelectorAll('.kEQVd8aneM1tVkcIKUyDT')
         .forEach((e) => e.remove());
-}, 1000);
+};
+(trySetInterval = () => {
+    window.setInterval(removeShit, 1000);
+})();

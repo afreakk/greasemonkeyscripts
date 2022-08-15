@@ -16,17 +16,19 @@ const skipAd = () => {
         });
     }
     document
-        .querySelectorAll('ytd-promoted-sparkles-web-renderer')
-        .forEach((el) => el.remove());
-    document
         .querySelectorAll('.ytd-display-ad-renderer#dismissible')
         .forEach((el) =>
-            // experimental, hopefully it doesn't remove unintended stuff. supposed to remove the ad video in top left of recommended
+            // remove the ad video in top left of recommended
             el?.parentElement?.parentElement?.parentElement?.remove?.()
         );
     document
-        .querySelectorAll('#player-ads, #masthead-ad')
-        .forEach((ad) => ad.remove());
+        .querySelectorAll(
+            'ytd-promoted-sparkles-web-renderer, #player-ads, #masthead-ad'
+        )
+        .forEach((el) => el.remove());
+    document
+        .querySelectorAll('.ytd-mealbar-promo-renderer#dismiss-button')
+        .forEach((el) => el.click());
 };
 if (!window.skipAdIntervalID) {
     window.skipAdIntervalID = setInterval(skipAd, 333);

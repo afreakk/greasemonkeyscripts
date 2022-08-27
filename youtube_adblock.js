@@ -23,7 +23,7 @@ const skipAd = () => {
         );
     document
         .querySelectorAll(
-            'ytd-promoted-sparkles-web-renderer, #player-ads, #masthead-ad'
+            'ytd-promoted-sparkles-web-renderer, #player-ads, #masthead-ad, ytd-compact-promoted-video-renderer'
         )
         .forEach((el) => el.remove());
     document

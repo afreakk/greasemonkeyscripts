@@ -8,7 +8,9 @@
 // ==/UserScript==
 const skipAd = () => {
     document
-        .querySelectorAll('.videoAdUiSkipButton,.ytp-ad-skip-button')
+        .querySelectorAll(
+            '.videoAdUiSkipButton,.ytp-ad-skip-button,.ytp-ad-skip-button-modern'
+        )
         .forEach((b) => b.click());
     if (document.querySelector('.ad-showing')) {
         document.querySelectorAll('video').forEach((v) => {

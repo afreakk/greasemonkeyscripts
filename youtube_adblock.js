@@ -17,17 +17,21 @@ const skipAd = () => {
             Number.isNaN(v.duration) || (v.currentTime = v.duration);
         });
     }
-    document
-        .querySelectorAll('.ytd-display-ad-renderer#dismissible')
-        .forEach((el) =>
-            // remove the ad video in top left of recommended
-            el?.parentElement?.parentElement?.parentElement?.remove?.()
-        );
-    document
-        .querySelectorAll(
-            'ytd-promoted-sparkles-web-renderer, #player-ads, #masthead-ad, ytd-compact-promoted-video-renderer'
-        )
-        .forEach((el) => el.remove());
+    // this is the interspersed ads around the recommended/related videos
+    for (const el of document.getElementsByTagName('ytd-ad-slot-renderer')) {
+        if (
+            el?.parentElement?.parentElement?.tagName ===
+            'YTD-RICH-ITEM-RENDERER'
+        ) {
+            el?.parentElement?.parentElement?.remove();
+        } else {
+            el?.remove();
+        }
+    }
+    // in related videos, this is the ad on top
+    for (const el of document.getElementById('player-ads')) {
+        el?.remove();
+    }
     document
         .querySelectorAll('.ytd-mealbar-promo-renderer#dismiss-button')
         .forEach((el) => el.click());

@@ -28,10 +28,20 @@ const skipAd = () => {
             el?.remove();
         }
     }
+    // in youtube-shorts we get some ads, try remove them
+    // (this ain't working, freezes the whole thing)
+    // for (const el of document.getElementsByClassName('ad-created')) {
+    //     if (
+    //         el?.parentElement?.parentElement?.parentElement?.parentElement
+    //             ?.parentElement?.parentElement?.tagName ===
+    //         'YTD-REEL-VIDEO-RENDERER'
+    //     ) {
+    //         el?.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.parentElement?.remove();
+    //     }
+    // }
+
     // in related videos, this is the ad on top
-    for (const el of document.getElementById('player-ads')) {
-        el?.remove();
-    }
+    document.getElementById('player-ads')?.remove();
     document
         .querySelectorAll('.ytd-mealbar-promo-renderer#dismiss-button')
         .forEach((el) => el.click());

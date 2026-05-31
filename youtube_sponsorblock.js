@@ -9,19 +9,20 @@
 // ==/UserScript==
 const delay = 1000;
 
-const tryFetchSkipSegments = (videoID) =>
-
-    fetch(`https://sponsor.ajay.app/api/skipSegments?videoID=${videoID}`)
-        .then((r) => r.json())
-        .then((rJson) =>
-            rJson.filter((a) => a.actionType === 'skip').map((a) => a.segment)
-        )
-        .catch(
-            (e) =>
-                console.log(
-                    `Sponsorblock: failed fetching skipSegments for ${videoID}, reason: ${e}`
-                ) || []
-        );
+const tryFetchSkipSegments = async (videoID) => {
+    try {
+        const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(videoID));
+        const prefix = [...new Uint8Array(digest)]
+            .map((b) => b.toString(16).padStart(2, '0')).join('').slice(0, 4);
+        const r = await fetch(`https://sponsor.ajay.app/api/skipSegments/${prefix}`);
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        const entry = (await r.json()).find((e) => e.videoID === videoID);
+        return entry ? entry.segments.filter((a) => a.actionType === 'skip').map((a) => a.segment) : [];
+    } catch (e) {
+        console.log(`Sponsorblock: failed fetching skipSegments for ${videoID}, reason: ${e}`);
+        return [];
+    }
+};
 
 const skipSegments = async () => {
     const videoID = new URL(document.location).searchParams.get('v');

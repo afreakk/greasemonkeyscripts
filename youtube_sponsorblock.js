@@ -35,7 +35,12 @@ const currentVideoID = () => {
 // Pane plays the video in an embed iframe and keeps re-syncing the hidden
 // #movie_player video to it, so seeking that one is useless. The copy of this
 // script running inside the embed frame does the skipping instead.
-const paneActive = () => window.top === window.self && document.getElementById('pn_playerWrapper');
+// In Pane's fallback mode (pn_fallback) the native player is the real one.
+const paneActive = () => {
+    if (window.top !== window.self) return false;
+    const wrapper = document.getElementById('pn_playerWrapper');
+    return !!wrapper && wrapper.offsetWidth > 0 && !document.body.classList.contains('pn_fallback');
+};
 
 const skipSegments = async () => {
     const videoID = currentVideoID();

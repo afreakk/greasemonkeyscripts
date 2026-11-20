@@ -16,6 +16,7 @@ const tryFetchSkipSegments = async (videoID) => {
         const prefix = [...new Uint8Array(digest)]
             .map((b) => b.toString(16).padStart(2, '0')).join('').slice(0, 4);
         const r = await fetch(`https://sponsor.ajay.app/api/skipSegments/${prefix}`);
+        if (r.status === 404) return []; // no video with this hash prefix has segments
         if (!r.ok) throw new Error(`HTTP ${r.status}`);
         const entry = (await r.json()).find((e) => e.videoID === videoID);
         return entry ? entry.segments.filter((a) => a.actionType === 'skip').map((a) => a.segment) : [];
@@ -25,8 +26,13 @@ const tryFetchSkipSegments = async (videoID) => {
     }
 };
 
-// /watch?v=ID on the normal page, /embed/ID inside Pane's player iframe.
+// Ask the player first: Pane reuses its embed iframe and switches videos
+// without changing its /embed/ID URL, so the URL can name an old video.
+// Fall back to /watch?v=ID or /embed/ID.
 const currentVideoID = () => {
+    const player = document.getElementById('movie_player');
+    const fromPlayer = player && typeof player.getVideoData === 'function' && player.getVideoData().video_id;
+    if (fromPlayer) return fromPlayer;
     const url = new URL(document.location);
     const embed = url.pathname.match(/^\/embed\/([\w-]{11})/);
     return embed ? embed[1] : url.searchParams.get('v');
